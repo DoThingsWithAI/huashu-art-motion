@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "files": {
-    ".github/workflows/tests.yml": "baaf89f4a360bb1fd1ffc1ee7ab79419f93479d5a0d6773fc033a2c8d42bbd9d",
+    ".github/workflows/tests.yml": "91b5797ea6f59b6e31e53de2a846194e33ab1dbe24b2efb8c0ed4367324f8fbe",
     ".gitignore": "64ed0cc55105bb4b33ebd1baadd1eb18c74b604f6bbce0fbaa4c62b5eb425197",
     "CHANGELOG.md": "7bedbb5ed661647265c083e0e76cb82d03e1d0822564d06e0396319500eb2468",
     "CONTRIBUTING.md": "742a1a6071f6be25e82f0524a520fd6d09961be3f87d7a85940cd816ce7309a1",
     "LICENSE": "6d6a2a9caf2e6d2b76974050427053b2892d8aa4c33fd168ce63a537fcee9d96",
-    "README.md": "1b404ff23c34d3d4149bb07332bf1f780c5497b2a7f955e5b711983ce77cb1ba",
+    "README.md": "fab161f6e22b8ff74d11602990ada532ba28d49478c8297b010a442d354903f5",
     "SKILL.md": "1e4dffc3766442f2aedf4681dd492dae8345be0dfa532c2ca42194075d155cc6",
     "assets/showcase/egypt.gif": "256b946e2543192153f276dc46e0af98837c934ddb9e2e2c0c9843f0557cd54b",
     "assets/showcase/hero.png": "3b6b42bfb00f84925aebe2a10f85052dc6b4efb492e86f581f21f652b6686407",
@@ -364,7 +364,7 @@
     "scripts/engine/reference_films/spacex/transitions/paperSlide.js": "14eb0b28a2e78a7feeaf158b81d3aef640f9776dd0bb578f21b7e6bfafe40e13",
     "scripts/engine/reference_films/spacex/transitions/vox_pull.js": "79db9ef00e31a4a44872ef57f9ce9a5a89ed631c1a83d9b7e72129e4a7355959",
     "scripts/engine/reference_films/spacex/transitions/vox_slap.js": "78f8fa308a434a33d7007b776c4e006d711fea61d4f4dab9426baeebc6c3d573",
-    "scripts/engine/render.py": "eb2abd1a159a63a58fbf9da6bfc5e06febaeb31aec21ac091d351fc8159ed5dc",
+    "scripts/engine/render.py": "b7a8bf535f18b8e14e2e1da52a715dfb9923133a7e961499009a0c811f0739ff",
     "scripts/engine/scenes/01_cave.js": "06ff3360279ecf778d78ef5e56fa6d5cd6354a18033079eed32cba6af48dd781",
     "scripts/engine/scenes/02_egypt.js": "ce4acdce7f65f41686f7e5f04336fdf150bfd53a560a20f2a83a3db495a86353",
     "scripts/engine/scenes/03_greek.js": "58e259062257ebf15d2fb141e10441119df0691e0cc2bd212922a8cffb3be184",
@@ -408,10 +408,11 @@
     "scripts/key_green.py": "11ac28bb2508d6b4a240eb37a55b342a0f556943fe29a17962bbc0f93f90d303",
     "scripts/key_split.py": "889759cd6b5353b4d48d34faf3878682890e06ca79887c9ade9be401b7359f86",
     "scripts/koubo.py": "7837507e6bf02b20f8aa63efdc881c8de0d5de775b4bf31a1040bd3824348494",
-    "scripts/qa.py": "435fa30c91b432b0fd25a72e139c7a883b619c251a3545c9b460de192fcc3942",
+    "scripts/qa.py": "e6d229292103ffc0783e999d46984b3521cfe5b24803bc2db214bc3e03b6efed",
     "scripts/subzone_gate.py": "8641a3b1b38ac28c1562e454a0e370f36a73d1a0c79cddf36175c7444a9c1598",
     "tests/test_capabilities.py": "04ce548d5a72a11a87a3bd85c46a98e13f1aabafb096e3c59a6fc7a20bfdf4ad",
     "tests/test_images.py": "5fe7533ec25a2644e3685e1677186eaf1554ebbbcc390fcd56a45afbad872040",
+    "tests/test_local_server.py": "b775a60c86c4a0914d67c4cfb7cb37256a447db700bfdba146a2db3704ea83ff",
     "tests/test_release.py": "a190d8825e23f6204263f3d00d6728bf709586bc178c980d53244a82ef198b41"
   }
 }
