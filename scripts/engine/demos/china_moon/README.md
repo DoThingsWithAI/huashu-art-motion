@@ -4,66 +4,66 @@
 
 ## 目录
 
-- \`../../clips/china_moon.js\`：自定义语法 \`CLIPS.china_moon\`，复用原项目的 \`U\`、\`MO\`、\`TY\`
-- \`../../examples/china_moon_2026.json\`：时长 52 秒的八镜头时间轴
-- \`index.html\`：使用 \`../../clip.html\` 的网页播放器，自动播放 / 暂停 / 拖动 / 分镜跳转
-- \`validate.py\`：独立检查 spec 结构、分镜是否覆盖 0—52 秒
-- 原生输出链路：\`scripts/engine/render.py --spec ...\`
-- 原生数字质检：\`scripts/qa.py --spec ...\`
+- `../../clips/china_moon.js`：自定义语法 `CLIPS.china_moon`，复用原项目的 `U`、`MO`、`TY`
+- `../../examples/china_moon_2026.json`：时长 52 秒的八镜头时间轴
+- `index.html`：使用 `../../clip.html` 的网页播放器，自动播放 / 暂停 / 拖动 / 分镜跳转
+- `validate.py`：独立检查 spec 结构、分镜是否覆盖 0—52 秒
+- 原生输出链路：`scripts/engine/render.py --spec ...`
+- 原生数字质检：`scripts/qa.py --spec ...`
 
 ## 本地预览
 
 在仓库根目录执行：
 
-\`\`\`sh
+```sh
 python3 -m http.server 8000
-\`\`\`
+```
 
 访问：
 
-\`\`\`text
+```text
 http://localhost:8000/scripts/engine/demos/china_moon/
-\`\`\`
+```
 
 也可以直接看原生时间轴控件：
 
-\`\`\`text
+```text
 http://localhost:8000/scripts/engine/clip.html?spec=examples/china_moon_2026.json
-\`\`\`
+```
 
-> 不要双击本地 HTML 用 \`file://\` 打开：原生 \`clip.js\` 会请求 spec / 语法文件 / 字体资源，需要 HTTP 服务。
+> 不要双击本地 HTML 用 `file://` 打开：原生 `clip.js` 会请求 spec / 语法文件 / 字体资源，需要 HTTP 服务。
 
 ## 原项目渲染 MP4
 
-系统先安装 \`uv\`、\`ffmpeg\`、Playwright Chromium：
+系统先安装 `uv`、`ffmpeg`、Playwright Chromium：
 
-\`\`\`sh
+```sh
 uv run --with playwright playwright install chromium
 uv run --with playwright python scripts/engine/render.py \
   --spec scripts/engine/examples/china_moon_2026.json \
   --out 中国登月计划_原生版.mp4
-\`\`\`
+```
 
 渲染前抽帧确认（截图位于目录）：
 
-\`\`\`sh
+```sh
 uv run --with playwright python scripts/engine/render.py \
   --spec scripts/engine/examples/china_moon_2026.json \
   --stills 1,8,15,22,29,36,43,49 \
   --out moon-stills
-\`\`\`
+```
 
 执行原项目 QA（检查确定性、运动面积、跳帧、文字框景）：
 
-\`\`\`sh
+```sh
 uv run scripts/qa.py \
   --spec scripts/engine/examples/china_moon_2026.json \
   --out moon-qa
-\`\`\`
+```
 
-\`\`\`sh
+```sh
 python3 scripts/engine/demos/china_moon/validate.py
-\`\`\`
+```
 
 ## 内容口径
 
