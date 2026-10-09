@@ -1,0 +1,99 @@
+{
+  "grammar": "china_moon",
+  "duration": 52,
+  "fps": 24,
+  "width": 1280,
+  "height": 720,
+  "safe": {
+    "top": 0,
+    "bottom": 0,
+    "left": 0,
+    "right": 0
+  },
+  "data": {
+    "title": "中国登月计划",
+    "source": "国家航天局、中国载人航天工程办公室"
+  },
+  "cues": [
+    {
+      "at": 0,
+      "kind": "stage",
+      "dur": 6,
+      "text": "从地球，走向月球",
+      "sub": "中国探月计划 · 2007—2030",
+      "data": {
+        "scene": "intro"
+      }
+    },
+    {
+      "at": 6,
+      "kind": "stage",
+      "dur": 6,
+      "text": "绕 · 落 · 回，步步突破",
+      "sub": "中国探月工程三步走已完成",
+      "data": {
+        "scene": "history"
+      }
+    },
+    {
+      "at": 12,
+      "kind": "stage",
+      "dur": 7,
+      "text": "嫦娥六号：月背带回月壤",
+      "sub": "2024 年 · 首次月球背面采样返回",
+      "data": {
+        "scene": "six"
+      }
+    },
+    {
+      "at": 19,
+      "kind": "stage",
+      "dur": 7,
+      "text": "嫦娥七号：瞄准月球南极",
+      "sub": "任务调整：原定 2026 发射窗口未实施",
+      "data": {
+        "scene": "seven"
+      }
+    },
+    {
+      "at": 26,
+      "kind": "stage",
+      "dur": 7,
+      "text": "嫦娥八号：探索月面资源",
+      "sub": "2028 年前后计划实施 · 科研站建设的重要一步",
+      "data": {
+        "scene": "eight"
+      }
+    },
+    {
+      "at": 33,
+      "kind": "stage",
+      "dur": 7,
+      "text": "两次发射，奔赴月球",
+      "sub": "长征十号 · 梦舟 · 揽月",
+      "data": {
+        "scene": "launch"
+      }
+    },
+    {
+      "at": 40,
+      "kind": "stage",
+      "dur": 7,
+      "text": "在月球轨道会合，降落月面",
+      "sub": "交会对接 → 月面下降 → 探测与采样",
+      "data": {
+        "scene": "landing"
+      }
+    },
+    {
+      "at": 47,
+      "kind": "stage",
+      "dur": 5,
+      "text": "下一站：载人登月",
+      "sub": "2030 年前，实现中国人首次登陆月球",
+      "data": {
+        "scene": "outro"
+      }
+    }
+  ]
+}
