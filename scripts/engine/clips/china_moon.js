@@ -164,7 +164,7 @@ CLIPS.china_moon = (() => {
     text(g,'CHINA LUNAR EXPLORATION  /  中国探月',58,57,18,C.teal);
     const h= e(p(t,0,.7));
     TY.text(g,q.text,59,129,{size:49,fam:'PuHui-Bold',color:C.paper,
-      alpha:h,base:'middle'});
+      alpha:h,align:'left',base:'middle'});
     if(q.sub)text(g,q.sub,61,178,23,C.mute,'left',false,e(p(t,.35,.7)));
     line(g,[[59,209],[1208,209]],'rgba(116,168,218,.24)',1.5);
   }
