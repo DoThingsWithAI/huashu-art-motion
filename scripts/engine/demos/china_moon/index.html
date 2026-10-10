@@ -62,9 +62,36 @@ chapters.forEach(q=>{const b=document.createElement('button');b.textContent=q.te
 loadChapters().catch(e=>{console.warn('分镜导航读取失败',e)});
 function tick(now){if(ready&&playing){const dt=Math.min((now-last)/1000,.15);time+=dt;if(time>=DUR)time%=DUR;render()}last=now;requestAnimationFrame(tick)}
 requestAnimationFrame(tick);
-function poll(){let w;try{w=inner()}catch(e){return}if(w&&w.__bootFailed){cover.textContent='动画引擎初始化失败：'+w.__bootFailed;return}
-if(w&&w.__ready&&typeof w.renderFrame==='function'){ready=true;cover.style.display='none';seek.disabled=false;toggle.disabled=false;restart.disabled=false;render();setPlaying(true);return}
-setTimeout(poll,130)}
+// 初始化失败/超时要明确反馈，而不是让用户一直盯着“正在加载”。
+const loadStarted=performance.now();
+let pollTimer=0,finished=false;
+function showBootError(message){
+  if(finished)return;
+  finished=true;clearTimeout(pollTimer);
+  cover.textContent=message;
+  cover.setAttribute('role','alert');
+}
+function poll(){
+  if(finished)return;
+  let w;
+  try{w=inner()}catch(e){showBootError('无法访问动画引擎：'+String(e));return}
+  if(w&&w.__bootFailed){showBootError('动画引擎初始化失败：'+w.__bootFailed);return}
+  if(w&&w.__ready&&typeof w.renderFrame==='function'){
+    try{
+      ready=true;render();
+      finished=true;clearTimeout(pollTimer);
+      cover.style.display='none';
+      seek.disabled=false;toggle.disabled=false;restart.disabled=false;
+      setPlaying(true);
+    }catch(e){ready=false;showBootError('首帧渲染失败：'+String(e))}
+    return;
+  }
+  if(performance.now()-loadStarted>20000){
+    showBootError('动画加载超时，请刷新重试；如仍失败，请检查网络或浏览器控制台。');
+    return;
+  }
+  clearTimeout(pollTimer);pollTimer=setTimeout(poll,150);
+}
 iframe.addEventListener('load',poll);
-setTimeout(poll,300);
+pollTimer=setTimeout(poll,300);
 </script></body></html>
