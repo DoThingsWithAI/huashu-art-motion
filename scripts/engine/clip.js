@@ -27,7 +27,9 @@ async function boot() {
   if (!spec) {                                                           // 预览：?spec=<相对 engine 的路径>
     const u = new URLSearchParams(location.search).get('spec');
     if (!u) return fail('没有 spec：render.py --spec 会注入 window.CLIP_SPEC；预览用 clip.html?spec=examples/<名>.json');
-    spec = await (await fetch(u)).json();
+    const response = await fetch(u);
+    if (!response.ok) throw new Error(`读取动画时间轴失败：HTTP ${response.status} (${u})`);
+    spec = await response.json();
     const base = u.replace(/[^/]*$/, '');
     const fix = p => p && !/^(data:|https?:|\/)/.test(p) ? base + p : p;
     (spec.cues || []).forEach(q => { if (q.image) q.image = fix(q.image); });
@@ -38,20 +40,44 @@ async function boot() {
   if (!spec.grammar) return fail('spec 缺 grammar');
   if (!(spec.duration > 0)) return fail('spec.duration 必须 > 0');
   cv.width = W; cv.height = H; U.setStage(W, H);
-  // 语法文件（同步 XHR + eval，带 sourceURL，报错能定位）
-  const x = new XMLHttpRequest(); x.open('GET', `clips/${spec.grammar}.js`, false);
-  try { x.send(); } catch (e) { return fail('请求语法文件失败 ' + e); }
-  if (x.status !== 200) return fail(`没有这个语法：clips/${spec.grammar}.js（HTTP ${x.status}）`);
-  try { (0, eval)(x.responseText + `\n//# sourceURL=clips/${spec.grammar}.js`); } catch (e) { return fail(`clips/${spec.grammar}.js 执行出错 ${e.stack || e}`); }
+  // 异步注入原生语法脚本，避免同步 XHR / eval 阻塞主线程或被 CSP 禁止。
+  if (!/^[a-z0-9_]+$/.test(spec.grammar)) return fail('不支持的动画语法名称');
+  const grammarUrl = `clips/${spec.grammar}.js`;
+  await new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = grammarUrl;
+    script.onload = resolve;
+    script.onerror = () => reject(new Error(`语法文件加载失败：${grammarUrl}`));
+    document.head.appendChild(script);
+  });
   const G = CLIPS[spec.grammar]; if (!G || typeof G.draw !== 'function') return fail(`clips/${spec.grammar}.js 没注册 CLIPS['${spec.grammar}'] = { draw }`);
   // 图片
   const IMG = {}, urls = new Set();
   (spec.cues || []).forEach(q => q.image && urls.add(q.image)); if (spec.data && spec.data.image) urls.add(spec.data.image);
   try { await Promise.all([...urls].map(u => new Promise((res, rej) => { const im = new Image(); im.onload = () => { IMG[u] = im; res(); }; im.onerror = () => rej(u); im.src = u; }))); }
   catch (u) { return fail('图片加载失败：' + u); }
-  // 字体＋字形检查（spec 里的字缺字形只警告：回退系统字体照样能渲，但换台机器会变样）
-  for (const f of (window.FONT_FACES || [])) { const ff = new FontFace(f.family, `url(${f.url})`, f.desc || {}); await ff.load(); document.fonts.add(ff); }
-  await document.fonts.ready; await U.loadCmaps();
+  // 按语法声明加载字体：登月片仅需两个中文字重，不必顺序下载所有艺术风格字体。
+  // 未声明 fonts 的旧语法继续加载全部字体，保持兼容。
+  const allFonts = window.FONT_FACES || [];
+  const names = Array.isArray(G.fonts) && G.fonts.length ? new Set(G.fonts) : null;
+  const fonts = names ? allFonts.filter(f => names.has(f.family)) : allFonts;
+  if (names) {
+    for (const family of names) {
+      if (!fonts.some(f => f.family === family)) console.warn(`未注册字体：${family}（将使用浏览器回退字体）`);
+    }
+  }
+  await Promise.all(fonts.map(async f => {
+    try {
+      const ff = new FontFace(f.family, `url(${f.url})`, f.desc || {});
+      await ff.load();
+      document.fonts.add(ff);
+    } catch (error) {
+      // 预览允许浏览器回退字体，避免单个字体损坏使整个播放器永久不可用。
+      console.warn(`加载字体失败：${f.family}`, error);
+    }
+  }));
+  await document.fonts.ready;
+  await U.loadCmaps(fonts);
   const cues0 = (spec.cues || []).map((q, i) => ({ ...q, i, at: +q.at || 0 })).sort((a, b) => a.at - b.at || a.i - b.i);
   for (const q of cues0) if (q.at > spec.duration + 1e-9) console.warn(`cue ${q.kind} at=${q.at} 超出片段时长 ${spec.duration}s，看不到，已丢掉（不占版面）`);
   const cues = cues0.filter(q => q.at <= spec.duration + 1e-9);   // 看不到的 cue 不进语法：否则照样占排版位置、进度轨照样数它
@@ -73,8 +99,8 @@ async function boot() {
     if (t0) cc.fillRect(0, 0, W, t0); if (b0) cc.fillRect(0, H - b0, W, b0); if (l0) cc.fillRect(0, 0, l0, H); if (r0) cc.fillRect(W - r0, 0, r0, H); }) : null;
   window.renderFrame = t => { c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, W, H); c.save(); G.draw(c, t, ctx); c.restore(); if (band) band(c); };
   window.prepare = async () => {};
-  window.__ready = true;
   window.renderFrame(0);
+  window.__ready = true;
   const sc = document.getElementById('scrub'), tt = document.getElementById('tt'); sc.max = spec.duration; sc.step = 1 / FPS;
   sc.oninput = () => { window.renderFrame(+sc.value); tt.textContent = (+sc.value).toFixed(3); };
 }
